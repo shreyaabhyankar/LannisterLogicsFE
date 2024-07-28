@@ -21,6 +21,7 @@ const Login = () => {
         isClosable: true,
       });
     } catch (error) {
+        console.log(error)
       toast({
         title: 'Error',
         description: error.response?.data?.error || 'An error occurred',

@@ -13,9 +13,6 @@ const twilioClient = new Twilio(accountSid, authToken);
 let otpStore = {}; // Temporary in-memory storage for OTPs
 
 const server = http.createServer((req, res) => {
-    req.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Adjust if React app runs on a different origin
-  req.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT');
-  req.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   // Allow CORS
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Adjust if React app runs on a different origin
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT');
