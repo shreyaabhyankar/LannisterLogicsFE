@@ -1,10 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Heading, FormControl, FormLabel, Input, Button, Stack, useToast, Icon, Text, Link } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Stack,
+  useToast,
+  Icon,
+  Text,
+  Center,
+  extendTheme,
+  ChakraProvider,
+} from '@chakra-ui/react';
 import axios from 'axios';
 import { FaUser, FaEnvelope, FaPhone, FaBuilding } from 'react-icons/fa';
-import './styles.css';
 
-const natwestPurple = '#6D28D9'; 
+// Define the NatWest purple theme
+const natwestTheme = extendTheme({
+  colors: {
+    primary: {
+      500: '#6D28D9', // NatWest Purple
+    },
+    secondary: {
+      500: '#E3D6E3', // Light Purple
+    },
+    cardBg: '#F7F7F7', // Off-white background for the card
+  },
+  components: {
+    Button: {
+      baseStyle: {
+        borderRadius: 'md',
+        fontWeight: 'bold',
+      },
+      variants: {
+        solid: {
+          bg: 'primary.500',
+          color: 'white',
+          _hover: {
+            bg: 'primary.600',
+          },
+          _active: {
+            bg: 'primary.700',
+          },
+        },
+      },
+    },
+    FormControl: {
+      baseStyle: {
+        mb: 4,
+      },
+    },
+  },
+});
 
 const Register = () => {
   const [formValues, setFormValues] = useState({
@@ -18,9 +68,10 @@ const Register = () => {
     revenue: '',
     platformId: 1,
     houseNo: '',
-    country:'',
-    postalCode:'',
-    yearsOfLiving:''
+    country: '',
+    postalCode: '',
+    yearsOfLiving: '',
+    DOB: ''
   });
   const [loading, setLoading] = useState(false);
   const [submissionDisabled, setSubmissionDisabled] = useState(false);
@@ -29,24 +80,35 @@ const Register = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dummyjson.com/users/2'); 
+        const response = await axios.get('https://dummyjson.com/users/2');
 
         const apiData = response.data;
 
+        const formatDate = (date) => {
+            if (!date) return '';
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); 
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+          };
+
+        const formattedDate = formatDate(new Date(apiData.birthDate))
+
         setFormValues({
-          businessId: apiData.id || 0, 
+          businessId: apiData.id || 0,
           businessName: apiData.company.name || '',
           businessEmail: apiData.email || '',
           contact: '+918277113655',
-          founderName: apiData.firstName + ' ' + apiData.lastName || '', 
-          legalStructure: '', 
-          noOfDirectors: '', 
-          revenue: '', 
+          founderName: apiData.firstName + ' ' + apiData.lastName || '',
+          legalStructure: '',
+          noOfDirectors: '',
+          revenue: '',
           platformId: 1,
           houseNo: apiData.company.address.address || '',
-          country:apiData.company.address.country || '',
+          country: apiData.company.address.country || '',
           postalCode: apiData.company.address.postalCode || '',
-          yearsOfLiving:''
+          yearsOfLiving: '',
+          DOB: String(formattedDate) || ''
         });
 
       } catch (error) {
@@ -73,7 +135,7 @@ const Register = () => {
     setSubmissionDisabled(true);
     setLoading(true);
     try {
-      await axios.post('http://localhost:8081/api/user/register', formValues); 
+      await axios.post('http://localhost:8081/api/user/register', formValues);
       toast({
         title: 'Success',
         description: 'Registration successful.',
@@ -81,32 +143,88 @@ const Register = () => {
         duration: 5000,
         isClosable: true,
       });
+      window.location.href = 'http://localhost:3000/login';
     } catch (error) {
-      console.error('Error submitting registration form:', error);
-      toast({
-        title: 'Error',
-        description: 'Registration failed.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+        if (error.response) {
+            // Server responded with a status code outside the range of 2xx
+            const status = error.response.status;
+      
+            // Handle specific HTTP status codes
+            if (status === 409) {
+              // Conflict error (e.g., duplicate entry)
+              toast({
+                title: 'Error',
+                description: 'A user with this businessId already exists.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+              });
+            } else if (status === 400) {
+              // Bad Request (e.g., validation errors)
+              toast({
+                title: 'Error',
+                description: 'There was a problem with your submission. Please check your input and try again.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+              });
+            } else {
+              // Other server errors
+              toast({
+                title: 'Error',
+                description: 'Registration failed. Please try again later.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+              });
+            }
+    }}
     setSubmissionDisabled(false);
     setLoading(false);
   };
 
   return (
-    <Box className="full-page-background" minHeight="100vh" display="flex" alignItems="center" justifyContent="center">
-      <form onSubmit={handleSubmit}>
-        <Flex direction="column" align={'center'} justify={'center'} p="4" maxWidth="md" mx="auto" bg="white" borderRadius="md" boxShadow="md">
+    <ChakraProvider theme={natwestTheme}>
+      <Box
+        bgGradient="linear(to-r, #a4508b, #5f0a87)"  // Gradient background
+        minH="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        position="relative"
+        py={10}
+      >
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          right="0"
+          bottom="0"
+          bg="rgba(0, 0, 0, 0.3)"  // Dark overlay
+        />
+        <Flex
+          as="form"
+          direction="column"
+          align={'center'}
+          justify={'center'}
+          p="4"
+          maxWidth="md"
+          mx="auto"
+          bg="cardBg"  // Off-white card background
+          borderRadius="lg"
+          boxShadow="lg"
+          position="relative"
+          zIndex="1"
+          onSubmit={handleSubmit}
+        >
           <Stack spacing={6} p={8} width="full">
             <Stack align={'center'}>
-              <Heading color={natwestPurple} fontSize={'4xl'} textAlign={'center'}>
+              <Heading color="primary.500" fontSize={'3xl'} textAlign={'center'}>
                 BUSINESS REGISTRATION
               </Heading>
             </Stack>
 
-            <Stack spacing={4}>
+            <Stack spacing={4} width="full">
               <FormControl isInvalid={formValues.businessName === ''}>
                 <FormLabel htmlFor="businessName">Business Name</FormLabel>
                 <Flex align="center">
@@ -116,10 +234,10 @@ const Register = () => {
                     placeholder="Enter business name"
                     value={formValues.businessName}
                     onChange={handleChange}
-                    borderColor={natwestPurple}
-                    _focus={{ borderColor: natwestPurple }}
+                    borderColor="primary.500"
+                    _focus={{ borderColor: 'primary.500' }}
                   />
-                  <Icon as={FaBuilding} boxSize={6} ml={4} color={natwestPurple} />
+                  <Icon as={FaBuilding} boxSize={6} ml={4} color="primary.500" />
                 </Flex>
               </FormControl>
 
@@ -133,10 +251,10 @@ const Register = () => {
                     placeholder="Enter business email address"
                     value={formValues.businessEmail}
                     onChange={handleChange}
-                    borderColor={natwestPurple}
-                    _focus={{ borderColor: natwestPurple }}
+                    borderColor="primary.500"
+                    _focus={{ borderColor: 'primary.500' }}
                   />
-                  <Icon as={FaEnvelope} boxSize={6} ml={4} color={natwestPurple} />
+                  <Icon as={FaEnvelope} boxSize={6} ml={4} color="primary.500" />
                 </Flex>
               </FormControl>
 
@@ -149,10 +267,10 @@ const Register = () => {
                     placeholder="Enter contact number"
                     value={formValues.contact}
                     onChange={handleChange}
-                    borderColor={natwestPurple}
-                    _focus={{ borderColor: natwestPurple }}
+                    borderColor="primary.500"
+                    _focus={{ borderColor: 'primary.500' }}
                   />
-                  <Icon as={FaPhone} boxSize={6} ml={4} color={natwestPurple} />
+                  <Icon as={FaPhone} boxSize={6} ml={4} color="primary.500" />
                 </Flex>
               </FormControl>
 
@@ -165,10 +283,10 @@ const Register = () => {
                     placeholder="Enter founder's name"
                     value={formValues.founderName}
                     onChange={handleChange}
-                    borderColor={natwestPurple}
-                    _focus={{ borderColor: natwestPurple }}
+                    borderColor="primary.500"
+                    _focus={{ borderColor: 'primary.500' }}
                   />
-                  <Icon as={FaUser} boxSize={6} ml={4} color={natwestPurple} />
+                  <Icon as={FaUser} boxSize={6} ml={4} color="primary.500" />
                 </Flex>
               </FormControl>
 
@@ -180,8 +298,8 @@ const Register = () => {
                   placeholder="Enter legal structure"
                   value={formValues.legalStructure}
                   onChange={handleChange}
-                  borderColor={natwestPurple}
-                  _focus={{ borderColor: natwestPurple }}
+                  borderColor="primary.500"
+                  _focus={{ borderColor: 'primary.500' }}
                 />
               </FormControl>
 
@@ -193,8 +311,8 @@ const Register = () => {
                   placeholder="Enter number of directors"
                   value={formValues.noOfDirectors}
                   onChange={handleChange}
-                  borderColor={natwestPurple}
-                  _focus={{ borderColor: natwestPurple }}
+                  borderColor="primary.500"
+                  _focus={{ borderColor: 'primary.500' }}
                 />
               </FormControl>
 
@@ -206,10 +324,25 @@ const Register = () => {
                   placeholder="Enter revenue"
                   value={formValues.revenue}
                   onChange={handleChange}
-                  borderColor={natwestPurple}
-                  _focus={{ borderColor: natwestPurple }}
+                  borderColor="primary.500"
+                  _focus={{ borderColor: 'primary.500' }}
                 />
               </FormControl>
+
+              <FormControl isInvalid={formValues.DOB === ''}>
+                <FormLabel htmlFor="DOB">Date of Establishment</FormLabel>
+                <Input
+                    id="DOB"
+                    name="DOB"
+                    type="date"
+                    placeholder="Select date of establishment"
+                    value={formValues.DOB}
+                    onChange={handleChange}
+                    borderColor="primary.500"
+                    _focus={{ borderColor: 'primary.500' }}
+                />
+                </FormControl>
+
 
               {/* Address Fields */}
               <FormControl isInvalid={formValues.houseNo === ''}>
@@ -220,8 +353,8 @@ const Register = () => {
                   placeholder="Enter house number"
                   value={formValues.houseNo}
                   onChange={handleChange}
-                  borderColor={natwestPurple}
-                  _focus={{ borderColor: natwestPurple }}
+                  borderColor="primary.500"
+                  _focus={{ borderColor: 'primary.500' }}
                 />
               </FormControl>
 
@@ -233,8 +366,8 @@ const Register = () => {
                   placeholder="Enter country"
                   value={formValues.country}
                   onChange={handleChange}
-                  borderColor={natwestPurple}
-                  _focus={{ borderColor: natwestPurple }}
+                  borderColor="primary.500"
+                  _focus={{ borderColor: 'primary.500' }}
                 />
               </FormControl>
 
@@ -246,8 +379,8 @@ const Register = () => {
                   placeholder="Enter postal code"
                   value={formValues.postalCode}
                   onChange={handleChange}
-                  borderColor={natwestPurple}
-                  _focus={{ borderColor: natwestPurple }}
+                  borderColor="primary.500"
+                  _focus={{ borderColor: 'primary.500' }}
                 />
               </FormControl>
 
@@ -259,37 +392,30 @@ const Register = () => {
                   placeholder="Enter years of living"
                   value={formValues.yearsOfLiving}
                   onChange={handleChange}
-                  borderColor={natwestPurple}
-                  _focus={{ borderColor: natwestPurple }}
+                  borderColor="primary.500"
+                  _focus={{ borderColor: 'primary.500' }}
                 />
               </FormControl>
 
-              <Stack spacing={6} pt={4}>
+              <Stack spacing={6} pt={4} width="full">
                 <Button
                   type="submit"
                   isDisabled={submissionDisabled}
-                  colorScheme="purple"
                   size="lg"
                   isLoading={loading}
                   loadingText="Submitting"
-                  bg={natwestPurple}
-                  _hover={{ bg: '#5a1d9f' }} // Slightly darker purple on hover
-                  _active={{ bg: '#4a137c' }} // Even darker purple on click
+                  bg="primary.500"
+                  _hover={{ bg: '#5a1d9f' }}
+                  _active={{ bg: '#4a137c' }}
                 >
                   REGISTER
                 </Button>
               </Stack>
-
-              <Stack pt={6} align={'center'}>
-                <Text>
-                  Already registered? <Link href="/login" color={natwestPurple} fontWeight="600">Login</Link>
-                </Text>
-              </Stack>
             </Stack>
           </Stack>
         </Flex>
-      </form>
-    </Box>
+      </Box>
+    </ChakraProvider>
   );
 };
 
