@@ -10,7 +10,7 @@ const StartUp = () => {
     const onClickHandler = () => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:8081/api/user/1'); 
+          const response = await axios.get('http://localhost:8081/api/user/2'); 
           console.log(response.data)
           if(response.data) {
             window.location.href = 'http://localhost:3000/login';

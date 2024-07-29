@@ -1,25 +1,24 @@
-// server.js
+// command - node server.js
+
 const http = require('http');
 const { parse } = require('querystring');
 const Twilio = require('twilio');
 
 const port = 5000;
 
-// Replace with your Twilio credentials
 const accountSid = 'ACaecdf9fafdde7b9d960274bd7ce2629b';
 const authToken = '0103eb71bc6be6c9534d811c6049429e';
 const twilioClient = new Twilio(accountSid, authToken);
 
-let otpStore = {}; // Temporary in-memory storage for OTPs
-
+let otpStore = {}; 
 const server = http.createServer((req, res) => {
-  // Allow CORS
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Adjust if React app runs on a different origin
+
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); 
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
-    // Respond to preflight requests
+
     res.writeHead(204);
     res.end();
     return;
@@ -38,7 +37,7 @@ const server = http.createServer((req, res) => {
       if (req.url === '/send-otp') {
         const { phoneNumber } = parsedBody;
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        otpStore[phoneNumber] = otp; // Store OTP temporarily
+        otpStore[phoneNumber] = otp; 
 
         twilioClient.messages.create({
           body: `Your OTP code is ${otp}`,
@@ -56,7 +55,7 @@ const server = http.createServer((req, res) => {
       } else if (req.url === '/verify-otp') {
         const { phoneNumber, otp } = parsedBody;
         if (otpStore[phoneNumber] === otp) {
-          delete otpStore[phoneNumber]; // Clear OTP after successful verification
+          delete otpStore[phoneNumber]; 
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'OTP verified successfully' }));
         } else {

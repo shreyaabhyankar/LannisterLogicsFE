@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const Login = () => {
     
-    const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('+918277113655');
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const toast = useToast();
@@ -42,6 +42,8 @@ const Login = () => {
         duration: 5000,
         isClosable: true,
       });
+
+      window.location.href = 'http://localhost:3000/home';
     } catch (error) {
       toast({
         title: 'Verification Failed',
