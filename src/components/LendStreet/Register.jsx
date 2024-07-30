@@ -17,17 +17,17 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { FaUser, FaEnvelope, FaPhone, FaBuilding } from 'react-icons/fa';
+import { BUSINESS_ID } from '../../constants' 
 
-// Define the NatWest purple theme
 const natwestTheme = extendTheme({
   colors: {
     primary: {
-      500: '#6D28D9', // NatWest Purple
+      500: '#6D28D9', 
     },
     secondary: {
-      500: '#E3D6E3', // Light Purple
+      500: '#E3D6E3', 
     },
-    cardBg: '#F7F7F7', // Off-white background for the card
+    cardBg: '#F7F7F7', 
   },
   components: {
     Button: {
@@ -64,7 +64,6 @@ const Register = () => {
     contact: '',
     founderName: '',
     legalStructure: '',
-    noOfDirectors: '',
     revenue: '',
     platformId: 1,
     houseNo: '',
@@ -80,7 +79,7 @@ const Register = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dummyjson.com/users/2');
+        const response = await axios.get(`https://dummyjson.com/users/${BUSINESS_ID}`);
 
         const apiData = response.data;
 
@@ -101,7 +100,6 @@ const Register = () => {
           contact: '+918277113655',
           founderName: apiData.firstName + ' ' + apiData.lastName || '',
           legalStructure: '',
-          noOfDirectors: '',
           revenue: '',
           platformId: 1,
           houseNo: apiData.company.address.address || '',
@@ -143,15 +141,19 @@ const Register = () => {
         duration: 5000,
         isClosable: true,
       });
+
+      const response = await axios.get(`http://localhost:8081/api/user/${BUSINESS_ID}`); 
+      const userID = response.data.id;
+
+      localStorage.setItem('userID', userID);
       window.location.href = 'http://localhost:3000/login';
     } catch (error) {
         if (error.response) {
-            // Server responded with a status code outside the range of 2xx
+            
             const status = error.response.status;
-      
-            // Handle specific HTTP status codes
+
             if (status === 409) {
-              // Conflict error (e.g., duplicate entry)
+              // Conflict error
               toast({
                 title: 'Error',
                 description: 'A user with this businessId already exists.',
@@ -160,7 +162,7 @@ const Register = () => {
                 isClosable: true,
               });
             } else if (status === 400) {
-              // Bad Request (e.g., validation errors)
+              // Bad Request 
               toast({
                 title: 'Error',
                 description: 'There was a problem with your submission. Please check your input and try again.',
@@ -169,7 +171,6 @@ const Register = () => {
                 isClosable: true,
               });
             } else {
-              // Other server errors
               toast({
                 title: 'Error',
                 description: 'Registration failed. Please try again later.',
@@ -186,7 +187,7 @@ const Register = () => {
   return (
     <ChakraProvider theme={natwestTheme}>
       <Box
-        bgGradient="linear(to-r, #a4508b, #5f0a87)"  // Gradient background
+        bgGradient="linear(to-r, #a4508b, #5f0a87)"  
         minH="100vh"
         display="flex"
         alignItems="center"
@@ -200,7 +201,7 @@ const Register = () => {
           left="0"
           right="0"
           bottom="0"
-          bg="rgba(0, 0, 0, 0.3)"  // Dark overlay
+          bg="rgba(0, 0, 0, 0.3)" 
         />
         <Flex
           as="form"
@@ -210,7 +211,7 @@ const Register = () => {
           p="4"
           maxWidth="md"
           mx="auto"
-          bg="cardBg"  // Off-white card background
+          bg="cardBg" 
           borderRadius="lg"
           boxShadow="lg"
           position="relative"
@@ -297,19 +298,6 @@ const Register = () => {
                   name="legalStructure"
                   placeholder="Enter legal structure"
                   value={formValues.legalStructure}
-                  onChange={handleChange}
-                  borderColor="primary.500"
-                  _focus={{ borderColor: 'primary.500' }}
-                />
-              </FormControl>
-
-              <FormControl isInvalid={formValues.noOfDirectors === ''}>
-                <FormLabel htmlFor="noOfDirectors">Number of Directors</FormLabel>
-                <Input
-                  id="noOfDirectors"
-                  name="noOfDirectors"
-                  placeholder="Enter number of directors"
-                  value={formValues.noOfDirectors}
                   onChange={handleChange}
                   borderColor="primary.500"
                   _focus={{ borderColor: 'primary.500' }}

@@ -4,19 +4,24 @@ import Navbar from './PlatformNavbar';
 import Footer from './Footer';
 import './styles.css';
 import axios from 'axios';
+import { BUSINESS_ID } from '../../constants' 
 
 const StartUp = () => {
 
     const onClickHandler = () => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:8081/api/user/2'); 
-          console.log(response.data)
+          const response = await axios.get(`http://localhost:8081/api/user/${BUSINESS_ID}`); 
+          
           if(response.data) {
+            const userID = response.data.id;
+
+            localStorage.setItem('userID', userID);
             window.location.href = 'http://localhost:3000/login';
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
+          localStorage.setItem('userID', null);
           window.location.href = 'http://localhost:3000/register';
         }
       };

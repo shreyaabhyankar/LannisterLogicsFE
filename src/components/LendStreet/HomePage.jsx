@@ -1,9 +1,7 @@
-// Login.js
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import './styles.css'; // Ensure this includes the necessary CSS
-
+import './styles.css'; 
 const Login = () => {
     return (
         <div id="root">

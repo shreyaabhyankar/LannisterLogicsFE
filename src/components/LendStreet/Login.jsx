@@ -17,23 +17,22 @@ import {
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-// Define the NatWest purple theme
 const natwestTheme = extendTheme({
   colors: {
     primary: {
-      500: '#7A2E7A',  // NatWest Purple
+      500: '#7A2E7A',  
     },
     secondary: {
-      500: '#E3D6E3',  // Light Purple
+      500: '#E3D6E3',  
     },
-    cardBg: '#F7F7F7', // Off-white background for the card
+    cardBg: '#F7F7F7', 
   },
   components: {
     Card: {
       baseStyle: {
         borderRadius: 'lg',
         boxShadow: 'lg',
-        bg: 'cardBg', // Apply off-white background color
+        bg: 'cardBg', 
       },
     },
     Button: {
@@ -118,7 +117,7 @@ const Login = () => {
   return (
     <ChakraProvider theme={natwestTheme}>
       <Box
-        bgGradient="linear(to-r, #a4508b, #5f0a87)"  // Gradient background
+        bgGradient="linear(to-r, #a4508b, #5f0a87)"  
         minH="100vh"
         display="flex"
         alignItems="center"
@@ -132,7 +131,7 @@ const Login = () => {
           left="0"
           right="0"
           bottom="0"
-          bg="rgba(0, 0, 0, 0.3)"  // Dark overlay
+          bg="rgba(0, 0, 0, 0.3)"  
         />
         <Container maxW="md" position="relative" zIndex="1">
           <Card>

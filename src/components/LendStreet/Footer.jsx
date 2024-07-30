@@ -1,4 +1,3 @@
-// Footer.js
 import React from "react";
 import { Box, Center, Grid, HStack, List, ListItem, Text, VStack } from "@chakra-ui/react";
 import { BsFacebook, BsTwitter } from "react-icons/bs";
@@ -32,8 +31,8 @@ const Footer = () => {
             >
                 <VStack align="left" fontSize="18px" spacing="10px">
                     <List display="flex" justifyContent="space-between" mb="20px">
-                        <Link to='/support'><ListItem>Customer Care</ListItem></Link>
-                        <Link to='/dashboard'><ListItem>Loans</ListItem></Link>
+                        <Link to='/home'><ListItem>Customer Care</ListItem></Link>
+                        <Link to='/home'><ListItem>Loans</ListItem></Link>
                         <Link to='/calculator'><ListItem>Loan Calculator</ListItem></Link>
                     </List>
                 </VStack>
@@ -53,7 +52,7 @@ const Footer = () => {
                 </HStack>
             </Center>
             <Center pt="20px">
-                <Text>Copyright © Natwest 2023</Text>
+                <Text>Copyright © Natwest 2024</Text>
             </Center>
         </Box>
     );
