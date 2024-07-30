@@ -59,6 +59,10 @@ return(
   </Flex>
   
   <Flex align="center" ml={4} spacing={4} fontSize="lg">
+  <NavLink to="/home" style={{
+      textDecoration: 'none',
+        marginRight: '30px', 
+        fontSize: 'lg', }}>Home</NavLink>
     <NavLink
       to="/yourloans"
       style={({ isActive }) => ({
@@ -88,6 +92,7 @@ return(
     >
       Apply for Loan
     </NavLink>
+    
   </Flex>
 
   <Button

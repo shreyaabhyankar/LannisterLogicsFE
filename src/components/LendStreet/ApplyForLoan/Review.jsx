@@ -33,7 +33,7 @@ const formatLabel = (key) => {
     case 'principal':
       return 'Principal';
     case 'term':
-      return 'Term';
+      return 'Term (in years)';
     case 'businessName':
       return 'Business Name';
     case 'businessEmail':

@@ -3,9 +3,11 @@ import { ChakraProvider, Text, Container, Box, Button, Heading, VStack, HStack, 
 import ProductSelection from './ProductSelection';
 import BusinessInformation from './BusinessInformation';
 import AddressHistory from './AddressHistory';
-import FinancialInformation from './FinancialInformation'; // Import the new component
+import FinancialInformation from './FinancialInformation'; 
 import Review from './Review';
 import axios from 'axios';
+import Navbar from '../Navbar';
+import Footer from '../Footer';
 const steps = ['Product Selection', 'Business Information', 'Financial Information', 'Address History', 'Review'];
 
 const LoanApplicationForm = () => {
@@ -37,12 +39,16 @@ const LoanApplicationForm = () => {
 
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
+  const handleExit = () => {
+    window.location.href = 'http://localhost:3000/home';
+  }
+
   const handleSubmit = () => {
-    // Destructure formData to match your loan model fields
+
     const {
         loanType,
-        principal, // Maps to `initialPrincipal` in the model
-        term, // Maps to `termYear` in the model
+        principal, 
+        term, 
         businessName,
         businessEmail,
         businessId,
@@ -61,32 +67,29 @@ const LoanApplicationForm = () => {
 
     const currentDate = new Date().toISOString().split('T')[0];
 
-    // Prepare data to match the loan model
     const loanData = {
         loanType: loanType,
         termYear: Number(term),
         initialPrincipal: Number(principal),
-        outstandingPrincipal: Number(principal), // Assuming this is the same as initial principal for simplicity
-        interest: loanType === "Expansion Loan" ? 10 : 12, // You may need to calculate or get this value
+        outstandingPrincipal: Number(principal), 
+        interest: loanType === "Expansion Loan" ? 10 : 12, 
         interestAmount: 0,
-        outStandingTerm: Number(term), // You may need to calculate or get this value
-        dateOfApplication: currentDate, // Ensure this is in the correct format
-        user: { id: localStorage.getItem("userID") }, // Assuming `user` is an ID reference in the model
-        platform: 1, // Assuming a default platform ID or set it dynamically
-        existingBorrowing: existingDebtAmount > 0, // Assuming this is a boolean
+        outStandingTerm: Number(term), 
+        dateOfApplication: currentDate, 
+        user: { id: localStorage.getItem("userID") }, 
+        platform: 1, 
+        existingBorrowing: existingDebtAmount > 0, 
         existingBorrowingAmount: existingDebtAmount,
-        status: 'Pending', // Default status or set it as needed
+        status: 'Pending', 
         netProfit: netProfit,
         businessCreditScore: creditScore
     };
 
-    // Make POST request
     axios.post('http://localhost:8082/api/loan', loanData)
         .then(response => {
             console.log('Form successfully submitted:', response.data);
-            const loanId = response.data.id; // Assuming the response contains the created loan ID
+            const loanId = response.data.id; 
             
-            // Schedule status update to 'Accepted' after 1 minute
             setTimeout(() => {
                 axios.put(`http://localhost:8082/api/loan/${loanId}/status?status=Accepted`)
                     .then(updateResponse => {
@@ -95,14 +98,11 @@ const LoanApplicationForm = () => {
                     .catch(updateError => {
                         console.error('Error updating loan status:', updateError);
                     });
-            }, 10000); // 60000 ms = 1 minute
-
-            // Redirect or show a success message
+            }, 10000);
             
         })
         .catch(error => {
             console.error('There was an error submitting the form:', error);
-            // Optionally, you can show an error message here
         });
         window.location.href = 'http://localhost:3000/yourloans';
 };
@@ -128,6 +128,7 @@ const LoanApplicationForm = () => {
 
   return (
     <ChakraProvider theme={theme}>
+      <Navbar/>
       <Container maxW="container.xl" py={8}>
         <HStack spacing={8}>
           <Box
@@ -143,7 +144,7 @@ const LoanApplicationForm = () => {
                   p={3}
                   borderRadius="md"
                   borderWidth="1px"
-                  borderColor={index === step ? 'teal.500' : 'gray.300'}
+                  borderColor={index === step ? 'purple.500' : 'gray.300'}
                   width="full"
                   display="flex"
                   alignItems="center"
@@ -162,11 +163,11 @@ const LoanApplicationForm = () => {
                     color={completedSteps.has(index) ? 'green.500' : 'gray.700'}
                     fontWeight="bold"
                     fontSize="sm"
-                    mr={4} // Margin right to space out circle and text
+                    mr={4}
                   >
                     {index + 1}
                   </Box>
-                  <Text fontWeight="bold" color={index === step ? 'teal.700' : 'gray.700'}>
+                  <Text fontWeight="bold" color={index === step ? 'purple.700' : 'gray.700'}>
                     {label}
                   </Text>
                 </Box>
@@ -182,16 +183,21 @@ const LoanApplicationForm = () => {
               {getStepContent(step)}
               <HStack justify="space-between" mt={6}>
                 {step > 0 && (
-                  <Button onClick={prevStep} colorScheme="teal" variant="outline">
+                  <Button onClick={prevStep} colorScheme="purple" variant="outline">
                     Back
                   </Button>
                 )}
+                {step === 0 && (
+                  <Button onClick={handleExit} colorScheme="purple" variant="outline">
+                    Exit
+                  </Button>
+                )}
                 {step < steps.length - 1 ? (
-                  <Button onClick={nextStep} colorScheme="teal">
+                  <Button onClick={nextStep} colorScheme="purple">
                     Next
                   </Button>
                 ) : (
-                  <Button onClick={handleSubmit} colorScheme="teal">
+                  <Button onClick={handleSubmit} colorScheme="purple">
                     Submit
                   </Button>
                 )}
@@ -200,6 +206,7 @@ const LoanApplicationForm = () => {
           </Box>
         </HStack>
       </Container>
+      <Footer/>
     </ChakraProvider>
   );
 };

@@ -67,7 +67,7 @@ function Calculator() {
                             <VStack spacing={4}>
                                 <Input
                                     type="number"
-                                    placeholder="Loan Amount (INR)"
+                                    placeholder="Loan Amount (GBP)"
                                     value={principal}
                                     onChange={(e) => setPrincipal(e.target.value)}
                                 />
@@ -121,15 +121,15 @@ function Calculator() {
                                     <Tbody>
                                         <Tr bg="purple.100">
                                             <Td fontWeight="bold">Borrowing Amount</Td>
-                                            <Td>{principal} INR</Td>
+                                            <Td>{principal} GBP</Td>
                                         </Tr>
                                         <Tr>
                                             <Td fontWeight="bold">Monthly Repayments</Td>
-                                            <Td>{emi} INR</Td>
+                                            <Td>{emi} GBP</Td>
                                         </Tr>
                                         <Tr bg="purple.100">
                                             <Td fontWeight="bold">Total Repayment</Td>
-                                            <Td>{totalRepayment} INR</Td>
+                                            <Td>{totalRepayment} GBP</Td>
                                         </Tr>
                                         <Tr>
                                             <Td fontWeight="bold">Interest Rate</Td>
@@ -137,7 +137,7 @@ function Calculator() {
                                         </Tr>
                                         <Tr bg="purple.100">
                                             <Td fontWeight="bold">Total Interest Payable</Td>
-                                            <Td>{totalInterest} INR</Td>
+                                            <Td>{totalInterest} GBP</Td>
                                         </Tr>
                                     </Tbody>
                                 </Table>

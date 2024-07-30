@@ -7,6 +7,7 @@ import HomePage from "../components/LendStreet/HomePage"
 import Calculator from "../components/LendStreet/Calculator";
 import YourLoans from "../components/LendStreet/YourLoans";
 import LoanApplicationForm from "../components/LendStreet/ApplyForLoan/LoanApplicationForm";
+import Payment from "../components/LendStreet/Payment";
 
 export const MainRoutes = () => {
 
@@ -24,6 +25,7 @@ export const MainRoutes = () => {
                 <Route path="/apply" element={<LoanApplicationForm/>}></Route>
                 <Route path="/home" element={<HomePage />}/> 
                 <Route path="/yourloans" element={<YourLoans/>}/>
+                <Route path="/payment" element={<Payment/>}/>
                 </>
                 : <Route path="/login" element={<Login />}/> }
 

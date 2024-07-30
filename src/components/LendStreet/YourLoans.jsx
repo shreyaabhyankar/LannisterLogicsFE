@@ -28,54 +28,59 @@ const YourLoans = () => {
   }, []);
 
   const handlePay = (loanId) => {
-    window.location.href = 'http://localhost:3000/payment'
-    alert(`Paying for loan with ID: ${loanId}`);
+    localStorage.setItem('loanId', loanId);
+    window.location.href = 'http://localhost:3000/payment'; // Redirect to payment page
   };
 
   if (loading) return <Spinner size="xl" />;
   if (error) return <Text color="red.500">Error: {error}</Text>;
 
-  return (<>
-    <Navbar/>
-    <main>
-    <VStack spacing={4} align="start" p={4}>
-      <Text fontSize="2xl" fontWeight="bold">Your Loans</Text>
-      <Box w="full" overflowX="auto">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>#</Th>
-              <Th>Date of Application</Th>
-              <Th>Interest</Th>
-              <Th>Loan Type</Th>
-              <Th>Outstanding Principal</Th>
-              <Th>Status</Th>
-
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loans.map((loan, index) => (
-              <Tr key={loan.id}>
-                <Td>{index + 1}</Td>
-                <Td>{new Date(loan.dateOfApplication).toLocaleDateString()}</Td>
-                <Td>{loan.interest}%</Td>
-                <Td>{loan.loanType}</Td>
-                <Td>${loan.outstandingPrincipal.toFixed(2)}</Td>
-                
-                <Td>{loan.status}</Td>
-                <Td>
-                  <Button colorScheme="blue" onClick={() => handlePay(loan.id)}>Pay</Button>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
-    </VStack>
-    </main>
-
-    <Footer/>
-  </>
+  return (
+    <>
+      <Navbar />
+      <main>
+        <VStack spacing={4} align="start" p={4}>
+          <Text fontSize="2xl" fontWeight="bold">Your Loans</Text>
+          <Box w="full" overflowX="auto">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>#</Th>
+                  <Th>Date of Application</Th>
+                  <Th>Interest</Th>
+                  <Th>Loan Type</Th>
+                  <Th>Outstanding Principal</Th>
+                  <Th>Status</Th>
+                  <Th>Action</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {loans.map((loan, index) => (
+                  <Tr key={loan.id}>
+                    <Td>{index + 1}</Td>
+                    <Td>{new Date(loan.dateOfApplication).toLocaleDateString()}</Td>
+                    <Td>{loan.interest}%</Td>
+                    <Td>{loan.loanType}</Td>
+                    <Td>£ {loan.outstandingPrincipal.toFixed(2)}</Td>
+                    <Td>{loan.status}</Td>
+                    <Td>
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => handlePay(loan.id)}
+                        isDisabled={loan.outstandingPrincipal <= 0} // Disable if outstandingPrincipal is 0 or less
+                      >
+                        Pay
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Box>
+        </VStack>
+      </main>
+      <Footer />
+    </>
   );
 };
 

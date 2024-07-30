@@ -41,7 +41,7 @@ const ProductSelection = ({ formData, setFormData, nextStep }) => {
         setPrincipalValid(true);
       }
     } else {
-      setPrincipalValid(false); // Hide tick mark if not touched
+      setPrincipalValid(false); 
     }
   };
 
@@ -65,9 +65,9 @@ const ProductSelection = ({ formData, setFormData, nextStep }) => {
   const handleLoanTypeChange = (e) => {
     const selectedType = e.target.value;
     setLoanType(selectedType);
-    setFormData({ ...formData, loanType: selectedType, principal: '', term: '' }); // Reset fields
+    setFormData({ ...formData, loanType: selectedType, principal: '', term: '' }); 
     setErrors({});
-    setTouched({ principal: false, term: false }); // Reset touched state
+    setTouched({ principal: false, term: false }); 
   };
 
   const getPrincipalRange = () => {
@@ -147,7 +147,7 @@ const ProductSelection = ({ formData, setFormData, nextStep }) => {
             validateTerm(e.target.value);
           }}
           onFocus={() => setTouched((prev) => ({ ...prev, term: true }))}
-          onBlur={() => validateTerm(formData.term)} // Validate on blur
+          onBlur={() => validateTerm(formData.term)} 
         >
           <option value="">Select Term</option>
           {getTermOptions().map((year) => (

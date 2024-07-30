@@ -52,7 +52,7 @@ const Footer = () => {
                 </HStack>
             </Center>
             <Center pt="20px">
-                <Text>Copyright © Natwest 2024</Text>
+                <Text>Copyright © LendStreet 2024</Text>
             </Center>
         </Box>
     );

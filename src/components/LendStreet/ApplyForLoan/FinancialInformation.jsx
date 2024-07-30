@@ -7,7 +7,6 @@ const FinancialInformation = ({ formData, setFormData, nextStep, prevStep }) => 
   };
 
   const handleSubmit = () => {
-    // Additional validation if needed
     nextStep();
   };
 
