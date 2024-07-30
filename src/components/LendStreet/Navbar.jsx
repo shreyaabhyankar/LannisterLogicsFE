@@ -1,12 +1,12 @@
 import React from 'react';
 import { Box, Button, Flex, Text, useToast, useNavigate } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom'; // Import NavLink from react-router-dom
+import { NavLink } from 'react-router-dom'; 
 
 const themeColors = {
   primary: '#7A2E7A', 
   secondary: '#E3D6E3', 
-  accent: '#5C1A5C',  
+  accent: '#FFFFFF',  
 };
 
 const Navbar = () => {
@@ -23,6 +23,11 @@ const Navbar = () => {
     });
     window.location.href = 'http://localhost:3000/login';
   };
+
+  const handleClick = () => {
+    window.location.href = 'http://localhost:3000/home';
+  };
+
 return(
   <Flex
   as="nav"
@@ -45,6 +50,8 @@ return(
         color="white"
         ml={2}
         textShadow="2px 2px 4px rgba(0, 0, 0, 0.3)"
+        onClick={handleClick} 
+        cursor="pointer"
       >
         LendStreet
       </Text>
@@ -55,20 +62,28 @@ return(
     <NavLink
       to="/yourloans"
       style={({ isActive }) => ({
-        color: isActive ? themeColors.accent : 'white', 
+        color: isActive ? '#7A2E7A' : 'white', 
         textDecoration: 'none',
         marginRight: '30px', 
         fontSize: 'lg', 
+        fontWeight: isActive ? 'bold' : 'normal',
+        backgroundColor: isActive ? '#ffe4e1': 'transparent',
+        padding: '15px 10px',
       })}
     >
       Your Loans
     </NavLink>
     <NavLink
       to="/apply"
+
       style={({ isActive }) => ({
-        color: isActive ? themeColors.accent : 'white', 
+        color: isActive ? '#7A2E7A' : 'white', 
         textDecoration: 'none',
+        marginRight: '30px', 
         fontSize: 'lg', 
+        fontWeight: isActive ? 'bold' : 'normal',
+        backgroundColor: isActive ? '#ffe4e1': 'transparent',
+        padding: '15px 10px',
       })}
     >
       Apply for Loan

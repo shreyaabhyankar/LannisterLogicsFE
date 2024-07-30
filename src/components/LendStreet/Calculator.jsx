@@ -17,6 +17,8 @@ import {
     useBreakpointValue,
     VStack,
 } from "@chakra-ui/react";
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 function Calculator() {
     const [principal, setPrincipal] = useState();
@@ -41,8 +43,10 @@ function Calculator() {
         setTotalInterest(totalInterest.toFixed(2));
     };
     const tableSize = useBreakpointValue({base: "sm", sm: "md", md: "lg"});
-    return (
-        <ChakraProvider>
+    return (<>
+    <Navbar/>
+    <main>
+    <ChakraProvider>
             <Center
                 minH="100vh"
                 bgGradient="radial(at center, #993399, #3f1d67)"
@@ -143,6 +147,10 @@ function Calculator() {
                 </Box>
             </Center>
         </ChakraProvider>
+    </main>
+    <Footer/>
+    </>
+        
     );
 }
 

@@ -102,7 +102,8 @@ const Login = () => {
         isClosable: true,
       });
 
-      navigate('/home');
+      localStorage.setItem('isLoggedIn', 'true');
+      window.location.href = 'http://localhost:3000/login';
     } catch (error) {
       toast({
         title: 'Verification Failed',
