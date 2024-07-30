@@ -46,11 +46,11 @@ const YourLoans = () => {
             <Tr>
               <Th>#</Th>
               <Th>Date of Application</Th>
-              <Th>Initial Principal</Th>
               <Th>Interest</Th>
               <Th>Loan Type</Th>
               <Th>Outstanding Principal</Th>
-              <Th>Action</Th>
+              <Th>Status</Th>
+
             </Tr>
           </Thead>
           <Tbody>
@@ -58,10 +58,11 @@ const YourLoans = () => {
               <Tr key={loan.id}>
                 <Td>{index + 1}</Td>
                 <Td>{new Date(loan.dateOfApplication).toLocaleDateString()}</Td>
-                <Td>${loan.initialPrincipal.toFixed(2)}</Td>
-                <Td>${loan.interest.toFixed(2)}</Td>
-                <Td>{loan.loanType.loanName}</Td>
+                <Td>{loan.interest}%</Td>
+                <Td>{loan.loanType}</Td>
                 <Td>${loan.outstandingPrincipal.toFixed(2)}</Td>
+                
+                <Td>{loan.status}</Td>
                 <Td>
                   <Button colorScheme="blue" onClick={() => handlePay(loan.id)}>Pay</Button>
                 </Td>
