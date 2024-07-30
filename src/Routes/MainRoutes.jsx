@@ -6,6 +6,7 @@ import Login from "../components/LendStreet/Login";
 import HomePage from "../components/LendStreet/HomePage"
 import Calculator from "../components/LendStreet/Calculator";
 import YourLoans from "../components/LendStreet/YourLoans";
+import LoanApplicationForm from "../components/LendStreet/ApplyForLoan/LoanApplicationForm";
 
 export const MainRoutes = () => {
 
@@ -20,7 +21,7 @@ export const MainRoutes = () => {
 
                 { isLoggedIn === 'true' ?
                 <>
-
+                <Route path="/apply" element={<LoanApplicationForm/>}></Route>
                 <Route path="/home" element={<HomePage />}/> 
                 <Route path="/yourloans" element={<YourLoans/>}/>
                 </>
