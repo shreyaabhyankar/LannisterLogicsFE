@@ -60,7 +60,7 @@ const YourLoans = () => {
                 <Td>{new Date(loan.dateOfApplication).toLocaleDateString()}</Td>
                 <Td>${loan.initialPrincipal.toFixed(2)}</Td>
                 <Td>${loan.interest.toFixed(2)}</Td>
-                <Td>{loan.loanType}</Td>
+                <Td>{loan.loanType.loanName}</Td>
                 <Td>${loan.outstandingPrincipal.toFixed(2)}</Td>
                 <Td>
                   <Button colorScheme="blue" onClick={() => handlePay(loan.id)}>Pay</Button>
@@ -74,9 +74,7 @@ const YourLoans = () => {
     </main>
 
     <Footer/>
-
   </>
-    
   );
 };
 
